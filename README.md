@@ -1,60 +1,66 @@
-Here’s a clean, professional `README.md` file you can use for your GitHub repo, M.G. It’s modular, bilingual (Sinhala-English), and perfect for showcasing your Kubernetes + NGINX deployment project:
+# 🚀 Custom NGINX Application Deployment with Kubernetes & Minikube
+
+This repository documents and provides the configuration files for deploying a custom static HTML application using **NGINX**, packaged with **Docker**, and orchestrated via **Kubernetes (Minikube)**.
+
+This project serves as an excellent foundational example for mastering essential DevOps concepts, including containerization, local cluster management, and Infrastructure as Code (IaC) with YAML.
 
 ---
 
-```markdown
-# 🚀 Custom NGINX App Deployment with Kubernetes & Minikube
+## 💡 Key Project Components
 
-This project demonstrates how to build and deploy a custom HTML app using Docker, NGINX, and Kubernetes (Minikube). Ideal for learning container orchestration, DevOps workflows, and static site hosting.
-
----
-
-## 📁 Project Structure
-
-```
-Mini_Cube_Practice/
-├── app1-deployment.yaml
-├── app1-service.yaml
-├── myapp/
-│   ├── index.html
-│   └── Dockerfile
-```
+| File/Directory | Description | Purpose |
+| :--- | :--- | :--- |
+| `app-deployment.yaml` | Kubernetes Deployment Manifest | Defines the desired state (e.g., image, replica count) for the application Pods. |
+| `app-service.yaml` | Kubernetes Service Manifest | Defines how to expose the application (LoadBalancer or NodePort) for external access. |
+| `myapp/index.html` | Application Source Code | The static content served by the NGINX web server. |
+| `myapp/Dockerfile` | Docker Build Instructions | Specifies the base image (NGINX) and copies the HTML content into the container. |
 
 ---
 
-## 🧠 Workflow Summary – Sinhala-English
+## ⚙️ Deployment Workflow
 
-| Step | Command | Sinhala Explanation |
-|------|---------|---------------------|
-| 1️⃣ Delete old app2 | `kubectl delete deployment app2`<br>`kubectl delete service app2-service` | පරණ app එක delete කරනවා |
-| 2️⃣ Create folder + HTML | `mkdir myapp && cd myapp`<br>`nano index.html` | HTML file එක add කරනවා |
-| 3️⃣ Add Dockerfile | `nano Dockerfile` | NGINX + HTML එක bundle කරනවා |
-| 4️⃣ Build image | `docker build -t my-nginx-app2 .` | Docker image එක build කරනවා |
-| 5️⃣ Load to Minikube | `minikube image load my-nginx-app2` | Minikube එකට image එක push කරනවා |
-| 6️⃣ Update deployment YAML | `nano app2-deployment.yaml` | Pod එක recreate කරන YAML |
-| 7️⃣ Update service YAML | `nano app2-service.yaml` | Browser access port එක define කරනවා |
-| 8️⃣ Apply YAMLs | `kubectl apply -f app2-deployment.yaml`<br>`kubectl apply -f app2-service.yaml` | Pod + service create කරනවා |
-| 9️⃣ Access app | `minikube service app2-service` | Browser එකෙන් app එක access කරනවා |
+The following steps summarize the end-to-end process from source code to live application within the Minikube environment:
+
+### 1. Application Containerization (Docker)
+1.  **Create Source Files:** Define the HTML content (`myapp/index.html`) and the container configuration (`myapp/Dockerfile`).
+2.  **Build Docker Image:** Build the custom NGINX image locally.
+    ```bash
+    docker build -t my-nginx-app .
+    ```
+
+### 2. Minikube Integration
+3.  **Load Image to Minikube:** Push the newly built image directly into the Minikube cluster's local registry. This bypasses the need for an external registry (like Docker Hub) for local testing.
+    ```bash
+    minikube image load my-nginx-app
+    ```
+
+### 3. Kubernetes Deployment (IaC)
+4.  **Define Resources:** Ensure the `app-deployment.yaml` and `app-service.yaml` files reference the correct image name (`my-nginx-app`) and desired ports.
+5.  **Apply Manifests:** Apply the YAML files to create the Pods and Service resources in the cluster.
+    ```bash
+    kubectl apply -f app-deployment.yaml
+    kubectl apply -f app-service.yaml
+    ```
+
+### 4. Verification and Access
+6.  **Verify Deployment:** Confirm the Pods and Service are running correctly.
+    ```bash
+    kubectl get all
+    ```
+7.  **Access Application:** Use Minikube to automatically open the exposed Service in your browser.
+    ```bash
+    minikube service app-service
+    ```
+    *(The service name should match the name defined in your `app-service.yaml`)*
 
 ---
 
-## 🔧 Technologies Used
+## 🛠️ Technologies & Tools
 
-- Docker 🐳
-- Kubernetes (Minikube) ☸️
-- NGINX 🌐
-- YAML + CLI workflows
-- WSL + Linux + Git
+* **Containerization:** Docker 🐳
+* **Orchestration:** Kubernetes (Minikube) ☸️
+* **Web Server:** NGINX 🌐
+* **Methodology:** Infrastructure as Code (IaC), CLI Workflows
+* **Environment:** WSL / Linux
 
 ---
-
-## 🌍 Live Access (Local)
-
-After deployment, access your app via:
-
-```bash
-minikube service app2-service
-```
-
-Example URL: `http://127.0.0.1:31338`
-
